@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SIGNALS } from '../signals';
-import { calculateEnergyTrapeze, calculateAveragePower, formatEnergy } from '../utils/signalAnalysis';
+import { calculateEnergyTrapeze, calculateAveragePower, formatEnergy } from '../utils/SignalAnalysis.ts';
 import { Zap, Calculator } from 'lucide-react';
 
 export const PowerCalculation: React.FC = () => {

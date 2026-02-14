@@ -1,5 +1,6 @@
 import { TPSection } from '../types';
 import { SignalAnalysis } from '../components/SignalAnalysis';
+import { CustomSignal } from '../components/CustomSignal';
 
 export const TP_SECTIONS: TPSection[] = [
     {
@@ -15,6 +16,13 @@ export const TP_SECTIONS: TPSection[] = [
                 description: 'Visualisation, classification énergétique et calcul de puissance pour les signaux mathématiques',
                 component: SignalAnalysis,
             },
+             {
+                 id: 'tp1-exo2',
+                 number: 2,
+                 title: 'Signal Personnalisé',
+                 description: 'Créez et analysez vos propres signaux',
+                 component: CustomSignal,
+ },
         ],
     },
 ];

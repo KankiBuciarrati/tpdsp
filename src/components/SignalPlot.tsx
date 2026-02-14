@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SIGNALS } from '../signals';
-import { linspace } from '../utils/signalAnalysis';
+import { linspace } from '../utils/SignalAnalysis.ts';
 import { ArrowRight } from 'lucide-react';
 
 export const SignalPlot: React.FC = () => {

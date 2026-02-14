@@ -3,6 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
 import { Dashboard } from './components/Dashboard';
 import { getExerciseById } from './config/navigation';
+import { CustomSignal } from './components/CustomSignal';
 
 export const App: React.FC = () => {
     const [activeTP, setActiveTP] = useState<string | null>(null);

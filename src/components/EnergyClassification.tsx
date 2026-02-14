@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SIGNALS } from '../signals';
-import { analyzeAllSignals, formatEnergy } from '../utils/signalAnalysis';
+import { analyzeAllSignals, formatEnergy } from '../utils/SignalAnalysis.ts';
 import { AnalysisResult } from '../types';
 import { Zap, Play } from 'lucide-react';
 

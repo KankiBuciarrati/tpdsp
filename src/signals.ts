@@ -1,7 +1,8 @@
 import { SignalsDict } from './types';
 
 const x1 = (t: number[]): number[] => {
-    return t.map(ti => 2 * Math.exp(2 * ti - 1));
+    const rect = (tu: number) => Math.abs(tu) < 0.5 ? 1 : 0;
+    return t.map(ti => 2 * rect(2 * ti - 1));
 };
 
 const x2 = (t: number[]): number[] => {
@@ -32,7 +33,6 @@ const x6 = (t: number[]): number[] => {
         const exp = Math.exp(-0.5 * Math.pow((ti - t0) / epsilon, 2));
         return (1 / (epsilon * Math.sqrt(2 * Math.PI))) * exp;
     };
-
     return t.map(ti =>
         2 * deltaApprox(ti, -1) - deltaApprox(ti, 2) +
         deltaApprox(ti, 0) - 2 * deltaApprox(ti, 1)
@@ -69,7 +69,7 @@ const x12 = (t: number[]): number[] => {
 };
 
 export const SIGNALS: SignalsDict = {
-    'x1(t)': { func: x1, formula: '2Re(e^(2t-1))' },
+    'x1(t)': { func: x1, formula: '2Rect(2t-1)' },
     'x2(t)': { func: x2, formula: 'sin(πt)Rect(t/2)' },
     'x3(t)': { func: x3, formula: 'Tri(2t)' },
     'x4(t)': { func: x4, formula: 'U(t-2)' },
