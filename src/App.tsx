@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
 import { Dashboard } from './components/Dashboard';
-import { getTpById, getExerciseById } from './config/navigation';
+import { getExerciseById } from './config/navigation';
 
 export const App: React.FC = () => {
     const [activeTP, setActiveTP] = useState<string | null>(null);
@@ -23,7 +23,6 @@ export const App: React.FC = () => {
         setActiveExo(null);
     };
 
-    const currentTP = activeTP ? getTpById(activeTP) : null;
     const currentExo = activeTP && activeExo ? getExerciseById(activeTP, activeExo) : null;
     const ExerciseComponent = currentExo?.component;
 
