@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SIGNALS } from '../signals';
-import { calculateEnergyTrapeze, calculateAveragePower, formatEnergy } from '../utils/SignalAnalysis.ts';
+import { linspace } from '../utils/SignalAnalysis';
 import { Zap, Calculator } from 'lucide-react';
 
 export const PowerCalculation: React.FC = () => {
@@ -10,12 +10,34 @@ export const PowerCalculation: React.FC = () => {
     const [power, setPower] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
 
+    const calculateEnergyTrapeze = (values: number[], dt: number): number => {
+        let energy = 0;
+        for (let i = 0; i < values.length - 1; i++) {
+            const val1 = values[i] * values[i];
+            const val2 = values[i + 1] * values[i + 1];
+            energy += (val1 + val2) / 2 * dt;
+        }
+        return energy;
+    };
+
+    const formatEnergy = (val: number): string => {
+        if (!isFinite(val)) return '∞';
+        if (val === 0) return '0';
+        if (Math.abs(val) < 0.001 || Math.abs(val) > 1000) {
+            return val.toExponential(3);
+        }
+        return val.toFixed(3);
+    };
+
     const handleCalculate = () => {
         setLoading(true);
         setTimeout(() => {
             const signalFunc = SIGNALS['x11(t)'].func;
-            const e = calculateEnergyTrapeze(signalFunc, tStart, tEnd);
-            const p = calculateAveragePower(signalFunc, tStart, tEnd);
+            const t = linspace(tStart, tEnd, 1000);
+            const values = signalFunc(t);
+            const dt = (tEnd - tStart) / (t.length - 1);
+            const e = calculateEnergyTrapeze(values, dt);
+            const p = e / (tEnd - tStart);
             setEnergy(e);
             setPower(p);
             setLoading(false);

@@ -36,51 +36,57 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`
           fixed md:static
           left-0 top-0 h-screen
-          w-64 bg-gradient-to-b from-slate-900 to-slate-800
-          text-white border-r border-slate-700
+          w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900
+          text-white border-r border-slate-700/50 shadow-2xl
           transition-transform duration-300 z-50
           ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
           overflow-y-auto
         `}
             >
-                <div className="sticky top-0 bg-slate-900/95 backdrop-blur p-6 border-b border-slate-700">
+                <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-cyan-600 backdrop-blur p-6 border-b border-white/10 shadow-lg">
                     <div className="flex items-center gap-3 mb-2">
-                        <BookOpen size={28} className="text-blue-400" />
-                        <h1 className="text-xl font-bold">Signal Lab</h1>
+                        <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                            <BookOpen size={28} className="text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-bold">Signal Lab</h1>
+                            <p className="text-xs text-blue-100">Analyse de Signaux</p>
+                        </div>
                     </div>
-                    <p className="text-xs text-slate-400">Analyse de Signaux</p>
                 </div>
 
-                <nav className="p-4 space-y-2">
+                <nav className="p-5 space-y-3">
                     {TP_SECTIONS.map((tp) => (
                         <div key={tp.id}>
                             <button
                                 onClick={() => toggleTP(tp.id)}
                                 className={`
-                  w-full flex items-center justify-between px-4 py-3 rounded-lg
-                  transition-colors font-medium text-left
+                  w-full flex items-center justify-between px-5 py-4 rounded-xl
+                  transition-all duration-300 font-medium text-left group
                   ${
                                     activeTP === tp.id
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-slate-300 hover:bg-slate-700/50'
+                                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30 scale-105'
+                                        : 'text-slate-300 hover:bg-slate-700/70 hover:translate-x-1'
                                 }
                 `}
                             >
                 <span>
-                  <span className="font-bold text-blue-400">TP {tp.number}</span>
+                  <span className={`font-bold text-sm ${activeTP === tp.id ? 'text-white' : 'text-cyan-400'}`}>
+                    TP {tp.number}
+                  </span>
                   <br />
-                  <span className="text-sm">{tp.title}</span>
+                  <span className="text-sm mt-1 block">{tp.title}</span>
                 </span>
                                 <ChevronDown
-                                    size={18}
-                                    className={`transition-transform ${
+                                    size={20}
+                                    className={`transition-transform duration-300 ${
                                         expandedTP === tp.id ? 'rotate-180' : ''
                                     }`}
                                 />
                             </button>
 
                             {expandedTP === tp.id && (
-                                <div className="mt-2 ml-4 space-y-1 border-l border-slate-600 pl-4">
+                                <div className="mt-3 ml-4 space-y-2 border-l-2 border-slate-600/50 pl-4 animate-slide-up">
                                     {tp.exercises.map((exo) => (
                                         <button
                                             key={exo.id}
@@ -89,18 +95,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                 setIsOpen(false);
                                             }}
                                             className={`
-                        w-full text-left px-4 py-2 rounded transition-colors text-sm
+                        w-full text-left px-4 py-3 rounded-lg transition-all duration-300 text-sm group
                         ${
                                                 activeExo === exo.id
-                                                    ? 'bg-blue-500/20 text-blue-300 font-semibold border-l-2 border-blue-400'
-                                                    : 'text-slate-400 hover:text-slate-300 hover:bg-slate-700/30'
+                                                    ? 'bg-blue-500/30 text-blue-200 font-semibold border-l-4 border-cyan-400 shadow-lg'
+                                                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 hover:translate-x-1'
                                             }
                       `}
                                         >
-                      <span className="font-semibold text-blue-400">
-                        Exo {exo.number}.
-                      </span>{' '}
-                                            {exo.title}
+                      <div className="flex items-center gap-2">
+                        <span className={`font-bold text-xs ${activeExo === exo.id ? 'text-cyan-300' : 'text-cyan-500'}`}>
+                          Exo {exo.number}
+                        </span>
+                        <span className="text-slate-400">•</span>
+                        <span className="flex-1">{exo.title}</span>
+                      </div>
                                         </button>
                                     ))}
                                 </div>
@@ -109,9 +118,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     ))}
                 </nav>
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700 bg-slate-900/50 text-xs text-slate-400">
-                    <p>Exercice Traitement du Signal</p>
-                    <p className="mt-1">2024-2025</p>
+                <div className="absolute bottom-0 left-0 right-0 p-5 border-t border-slate-700/50 bg-gradient-to-t from-slate-900 to-transparent backdrop-blur-sm">
+                    <div className="text-xs text-slate-400 space-y-1">
+                        <p className="font-medium text-slate-300">Exercice Traitement du Signal</p>
+                        <p className="text-slate-500">2024-2025</p>
+                    </div>
                 </div>
             </aside>
 

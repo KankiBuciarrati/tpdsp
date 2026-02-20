@@ -49,11 +49,11 @@ export const SignalPlot: React.FC = () => {
         <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Signal</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Signal</label>
                     <select
                         value={selectedSignal}
                         onChange={(e) => setSelectedSignal(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium hover:border-gray-400"
                     >
                         {Object.keys(SIGNALS).map(name => (
                             <option key={name} value={name}>{name}</option>
@@ -62,37 +62,39 @@ export const SignalPlot: React.FC = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">t_start</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">t_start</label>
                     <input
                         type="number"
                         value={tStart}
                         onChange={(e) => setTStart(parseFloat(e.target.value))}
                         step={0.5}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-gray-400"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">t_end</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">t_end</label>
                     <input
                         type="number"
                         value={tEnd}
                         onChange={(e) => setTEnd(parseFloat(e.target.value))}
                         step={0.5}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-gray-400"
                     />
                 </div>
 
                 <div className="flex items-end">
-                    <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                        <ArrowRight className="inline mr-2" size={18} /> Plot
+                    <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-semibold hover:scale-105 flex items-center justify-center gap-2">
+                        <span>Tracer</span>
+                        <ArrowRight size={18} />
                     </button>
                 </div>
             </div>
 
-            <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-xl border-2 border-blue-200 shadow-sm">
                 <p className="text-sm text-gray-700">
-                    <span className="font-semibold">Formula:</span> {selectedSignal} = {signal.formula}
+                    <span className="font-bold text-blue-700">Formule:</span>
+                    <span className="ml-2 font-mono text-base">{selectedSignal} = {signal.formula}</span>
                 </p>
             </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { parseFormula, validateFormula, availableFunctions, formulaExamples } from '../utils/formulaParser';
-import { linspace } from '../utils/signalAnalysis';
+import { linspace } from '../utils/SignalAnalysis';
 import { ArrowRight, AlertCircle, Info, Zap, Calculator } from 'lucide-react';
 
 export const CustomSignal: React.FC = () => {
@@ -39,14 +39,14 @@ export const CustomSignal: React.FC = () => {
             setEnergy(calculatedEnergy);
 
             // Classifier le signal
-            classifySignal(calculatedEnergy, values, dt);
+            classifySignal(calculatedEnergy);
         } catch (err) {
             setError('Erreur lors du calcul du signal');
             setSignalData(null);
         }
     };
 
-    const classifySignal = (energyValue: number, values: number[], dt: number) => {
+    const classifySignal = (energyValue: number) => {
         const threshold = 1e10;
 
         if (energyValue < threshold && isFinite(energyValue)) {
