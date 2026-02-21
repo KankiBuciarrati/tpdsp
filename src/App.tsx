@@ -27,30 +27,39 @@ export const App: React.FC = () => {
     const ExerciseComponent = currentExo?.component;
 
     return (
-        <div className="flex h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-cyan-50/30">
-            <Sidebar
-                activeTP={activeTP || ''}
-                activeExo={activeExo || ''}
-                onTPChange={handleTPChange}
-                onExoChange={handleExoChange}
-            />
+        <div className="flex h-screen bg-gray-900 relative overflow-hidden">
+            <div className="animated-background" />
+            <div className="floating-orb orb-1" style={{ top: '10%', left: '-5%' }} />
+            <div className="floating-orb orb-2" style={{ top: '60%', right: '-10%' }} />
+            <div className="floating-orb orb-3" style={{ bottom: '10%', left: '50%' }} />
 
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <Topbar
-                    activeTP={activeTP}
-                    activeExo={activeExo}
-                    onBackToDashboard={handleBackToDashboard}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+
+            <div className="flex h-screen relative z-10">
+                <Sidebar
+                    activeTP={activeTP || ''}
+                    activeExo={activeExo || ''}
+                    onTPChange={handleTPChange}
+                    onExoChange={handleExoChange}
                 />
 
-                <main className="flex-1 overflow-auto">
-                    <div className="max-w-7xl mx-auto p-8">
-                        {ExerciseComponent ? (
-                            <ExerciseComponent />
-                        ) : (
-                            <Dashboard onSelectExercise={handleExoChange} />
-                        )}
-                    </div>
-                </main>
+                <div className="flex-1 flex flex-col overflow-hidden">
+                    <Topbar
+                        activeTP={activeTP}
+                        activeExo={activeExo}
+                        onBackToDashboard={handleBackToDashboard}
+                    />
+
+                    <main className="flex-1 overflow-auto">
+                        <div className="max-w-7xl mx-auto p-8">
+                            {ExerciseComponent ? (
+                                <ExerciseComponent />
+                            ) : (
+                                <Dashboard onSelectExercise={handleExoChange} />
+                            )}
+                        </div>
+                    </main>
+                </div>
             </div>
         </div>
     );

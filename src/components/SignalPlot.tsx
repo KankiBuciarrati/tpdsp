@@ -324,17 +324,25 @@ export const SignalPlot: React.FC = () => {
                 </svg>
 
                 {hoveredPoint && (
-                    <div className="mt-4 p-3 bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-300 rounded-lg">
-                        <p className="text-sm font-semibold text-red-900">Coordonnées au curseur</p>
-                        <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div className="mt-4 p-4 bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-300 rounded-xl shadow-lg">
+                        <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-xs text-red-700 uppercase tracking-wide">t (time)</p>
-                                <p className="font-mono text-lg font-bold text-red-900">{hoveredPoint.t.toFixed(4)}</p>
+                                <p className="text-sm font-semibold text-red-900 mb-3">Coordonnées au curseur</p>
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="bg-white/60 backdrop-blur px-4 py-3 rounded-lg border border-red-200">
+                                        <p className="text-xs text-red-700 uppercase tracking-widest font-bold">t (time)</p>
+                                        <p className="font-mono text-2xl font-bold text-red-900 mt-1">{hoveredPoint.t.toFixed(4)}</p>
+                                    </div>
+                                    <div className="bg-white/60 backdrop-blur px-4 py-3 rounded-lg border border-red-200">
+                                        <p className="text-xs text-red-700 uppercase tracking-widest font-bold">v (amplitude)</p>
+                                        <p className="font-mono text-2xl font-bold text-red-900 mt-1">{hoveredPoint.v.toFixed(4)}</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-xs text-red-700 uppercase tracking-wide">v (amplitude)</p>
-                                <p className="font-mono text-lg font-bold text-red-900">{hoveredPoint.v.toFixed(4)}</p>
-                            </div>
+                            <div className="text-red-300 text-4xl">▸</div>
+                        </div>
+                        <div className="mt-3 pt-3 border-t border-red-200">
+                            <p className="text-xs text-red-600">Zoom actif: [{tStart.toFixed(2)}, {tEnd.toFixed(2)}]</p>
                         </div>
                     </div>
                 )}
