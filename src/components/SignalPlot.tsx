@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { SIGNALS } from '../signals';
 import { linspace } from '../utils/SignalAnalysis.ts';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 
 export const SignalPlot: React.FC = () => {
     const [selectedSignal, setSelectedSignal] = useState(Object.keys(SIGNALS)[0]);
     const [tStart, setTStart] = useState(-5);
     const [tEnd, setTEnd] = useState(5);
+    const [hoveredPoint, setHoveredPoint] = useState<{ t: number; v: number; x: number; y: number } | null>(null);
+    const svgRef = useRef<SVGSVGElement>(null);
 
     const signal = SIGNALS[selectedSignal];
     const t = linspace(tStart, tEnd, 500);
@@ -37,6 +39,14 @@ export const SignalPlot: React.FC = () => {
         return MARGIN.top + plotHeight - ((value - yMin) / yRange) * plotHeight;
     };
 
+    const unscaleX = (pixel: number) => {
+        return tStart + ((pixel - MARGIN.left) / plotWidth) * (tEnd - tStart);
+    };
+
+    const unscaleY = (pixel: number) => {
+        return yMin + (plotHeight - (pixel - MARGIN.top)) / plotHeight * yRange;
+    };
+
     const pathData = validPoints.map((p, i) => {
         const x = scaleX(p.t);
         const y = scaleY(p.v);
@@ -44,6 +54,44 @@ export const SignalPlot: React.FC = () => {
     }).join(' ');
 
     const zeroLineY = scaleY(0);
+
+    const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+        if (!svgRef.current) return;
+        const rect = svgRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (x >= MARGIN.left && x <= WIDTH - MARGIN.right && y >= MARGIN.top && y <= HEIGHT - MARGIN.bottom) {
+            const t = unscaleX(x);
+            const v = unscaleY(y);
+            setHoveredPoint({ t, v, x, y });
+        } else {
+            setHoveredPoint(null);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredPoint(null);
+    };
+
+    const zoomIn = () => {
+        const center = (tStart + tEnd) / 2;
+        const range = (tEnd - tStart) / 2;
+        setTStart(center - range / 2);
+        setTEnd(center + range / 2);
+    };
+
+    const zoomOut = () => {
+        const center = (tStart + tEnd) / 2;
+        const range = (tEnd - tStart) / 2;
+        setTStart(center - range * 2);
+        setTEnd(center + range * 2);
+    };
+
+    const resetZoom = () => {
+        setTStart(-5);
+        setTEnd(5);
+    };
 
     return (
         <div className="space-y-6">
@@ -98,8 +146,42 @@ export const SignalPlot: React.FC = () => {
                 </p>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg p-4 overflow-x-auto">
-                <svg width={WIDTH} height={HEIGHT} className="mx-auto">
+            <div className="flex gap-2 justify-center mb-4">
+                <button
+                    onClick={zoomIn}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all hover:scale-105"
+                    title="Zoom in"
+                >
+                    <ZoomIn size={18} />
+                    Zoom In
+                </button>
+                <button
+                    onClick={zoomOut}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all hover:scale-105"
+                    title="Zoom out"
+                >
+                    <ZoomOut size={18} />
+                    Zoom Out
+                </button>
+                <button
+                    onClick={resetZoom}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all hover:scale-105"
+                    title="Reset zoom"
+                >
+                    <RotateCcw size={18} />
+                    Reset
+                </button>
+            </div>
+
+            <div className="bg-white border-2 border-gray-300 rounded-xl p-4 overflow-x-auto shadow-lg">
+                <svg
+                    ref={svgRef}
+                    width={WIDTH}
+                    height={HEIGHT}
+                    className="mx-auto cursor-crosshair"
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                >
                     <defs>
                         <linearGradient id="gridGradient" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#f0f9ff" />
@@ -207,7 +289,55 @@ export const SignalPlot: React.FC = () => {
                     <text x={20} y={HEIGHT / 2} textAnchor="middle" fontSize={14} fill="#333" fontWeight="bold" transform={`rotate(-90 20 ${HEIGHT / 2})`}>
                         Amplitude
                     </text>
+
+                    {hoveredPoint && (
+                        <>
+                            <circle
+                                cx={hoveredPoint.x}
+                                cy={hoveredPoint.y}
+                                r={5}
+                                fill="#ef4444"
+                                opacity={0.8}
+                            />
+                            <line
+                                x1={hoveredPoint.x}
+                                y1={MARGIN.top}
+                                x2={hoveredPoint.x}
+                                y2={HEIGHT - MARGIN.bottom}
+                                stroke="#ef4444"
+                                strokeWidth={1}
+                                strokeDasharray="3,3"
+                                opacity={0.5}
+                            />
+                            <line
+                                x1={MARGIN.left}
+                                y1={hoveredPoint.y}
+                                x2={WIDTH - MARGIN.right}
+                                y2={hoveredPoint.y}
+                                stroke="#ef4444"
+                                strokeWidth={1}
+                                strokeDasharray="3,3"
+                                opacity={0.5}
+                            />
+                        </>
+                    )}
                 </svg>
+
+                {hoveredPoint && (
+                    <div className="mt-4 p-3 bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-300 rounded-lg">
+                        <p className="text-sm font-semibold text-red-900">Coordonnées au curseur</p>
+                        <div className="grid grid-cols-2 gap-4 mt-2">
+                            <div>
+                                <p className="text-xs text-red-700 uppercase tracking-wide">t (time)</p>
+                                <p className="font-mono text-lg font-bold text-red-900">{hoveredPoint.t.toFixed(4)}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-red-700 uppercase tracking-wide">v (amplitude)</p>
+                                <p className="font-mono text-lg font-bold text-red-900">{hoveredPoint.v.toFixed(4)}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
